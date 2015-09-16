@@ -1,13 +1,17 @@
 usage: simple-consensus-per-read-group [-h] [-t x] [-d n] input.bam
 
 Constructs a simple (dumb) consensus sequence for each read group
-(RG) in a SAM file.
+(RG) in a BAM file.
 
 Base qualities are averaged for each site.  Percent identity
 thresholding is done to call a consensus base.  If no base reaches
 the threshold, an N is called.
 
-Input may be SAM or BAM.  Output is FastQ.
+Consensus sequences span only the reference bases between the first
+and last covered base.
+
+Input must be a BAM file indexed with `samtools index`.  Output is
+FastQ.
 
 positional arguments:
   input.bam            SAM/BAM file of aligned reads
