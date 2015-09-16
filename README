@@ -23,7 +23,7 @@ optional arguments:
   -d n, --min-depth n  Read depth below which a base is not called (default:
                        1)
 
-version 1.1.0
+version 1.1.1
 Copyright 2015 by Thomas Sibley <trsibley@uw.edu>
 Mullins Lab <https://mullinslab.microbiol.washington.edu>
 Department of Microbiology
