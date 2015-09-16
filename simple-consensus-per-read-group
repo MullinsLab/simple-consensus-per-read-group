@@ -39,7 +39,7 @@ class SimpleConsensus:
         for rg in groups:
             sequence = []
             quality  = []
-            for rpos in range(min(groups[rg]), max(groups[rg])):
+            for rpos in range(min(groups[rg]), max(groups[rg]) + 1):
                 if rpos not in groups[rg]:
                     sequence.append('N')
                     quality.append(0)
