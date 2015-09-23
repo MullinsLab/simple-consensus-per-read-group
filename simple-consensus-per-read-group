@@ -11,6 +11,24 @@ class SimpleConsensus:
         self.input = AlignmentFile( args['inputFile'] )
         self.threshold = args['threshold']
         self.minDepth = args['minDepth']
+        self.callAmbiguousBases = args['ambiguous']
+        self.ambiguity = {
+                "A":    "A",
+                "C":    "C",
+                "G":    "G",
+                "T":    "T",
+                "AC":   "M",
+                "AG":   "R",
+                "AT":   "W",
+                "CG":   "S",
+                "CT":   "Y",
+                "GT":   "K",
+                "ACG":  "V",
+                "ACT":  "H",
+                "AGT":  "D",
+                "CGT":  "B",
+                "ACGT": "N"
+                }
 
     def run(self):
         pileup = self.input.pileup( stepper = 'all' )
@@ -26,6 +44,9 @@ class SimpleConsensus:
                     rg = alignment.get_tag('RG')
                 except KeyError:
                     # No read group for this read?!
+                    continue
+
+                if qpos is None:
                     continue
 
                 if rg not in groups:
@@ -65,13 +86,20 @@ class SimpleConsensus:
 
                 if freqs[most_common_base] >= self.threshold:
                     sequence.append(most_common_base)
-                    quality.append(sum(quals) / len(quals)) # XXX: can this be better?
-                else:
+                    quality.append(sum(quals) // len(quals)) # XXX: can this be better?
+                elif (not self.callAmbiguousBases) or most_common_base is 'N':
                     sequence.append('N')
-                    quality.append(0)
+                    quality.append(0) # XXX: can this be better?
+                else:
+                    nts = sorted(list(freqs.keys()))
+                    if 'N' in nts:
+                        nts.remove('N')
+                    ambig = ''.join(nts)
+                    sequence.append(self.ambiguity[ambig])
+                    quality.append(sum(quals) // len(quals)) # XXX: can this be better?
 
             # Output FastQ
-            print "@%s\n%s\n+\n%s" % (rg, ''.join(sequence), toQualityString(quality))
+            print("@%s\n%s\n+\n%s" % (rg, ''.join(sequence), toQualityString(quality)))
 
 class BetterFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
     pass
@@ -118,6 +146,13 @@ def parseCommandArguments(*args):
         default  = 1,
         help     = "Read depth below which a base is not called",
         metavar  = "n")
+
+    parser.add_argument("-a", "--ambiguous",
+        dest     = "ambiguous",
+        action   = "store_true",
+        help     = "Call bases below threshold with ambiguity codes")
+
+    parser.set_defaults(ambiguous = False)
 
     return vars(parser.parse_args(*args))
 
