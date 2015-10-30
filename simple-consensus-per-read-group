@@ -4,13 +4,14 @@ import sys, re, argparse
 from textwrap import dedent
 from pysam    import AlignmentFile, toQualityString
 
-__version__ = '1.1.1'
+__version__ = '1.2.0'
 
 class SimpleConsensus:
     def __init__(self, **args):
         self.input = AlignmentFile( args['inputFile'] )
         self.threshold = args['threshold']
         self.minDepth = args['minDepth']
+        self.ignoreReadGroups = args['ignoreReadGroups']
         self.callAmbiguousBases = args['ambiguous']
         self.ambiguity = {
                 "A":    "A",
@@ -40,11 +41,14 @@ class SimpleConsensus:
             for read in site.pileups:
                 qpos = read.query_position
                 alignment = read.alignment
-                try:
-                    rg = alignment.get_tag('RG')
-                except KeyError:
-                    # No read group for this read?!
-                    continue
+                if not self.ignoreReadGroups:
+                    try:
+                        rg = alignment.get_tag('RG')
+                    except KeyError:
+                        # No read group for this read?!
+                        continue
+                else:
+                    rg = 'Consensus'
 
                 if qpos is None:
                     continue
@@ -152,7 +156,15 @@ def parseCommandArguments(*args):
         action   = "store_true",
         help     = "Call bases below threshold with ambiguity codes")
 
-    parser.set_defaults(ambiguous = False)
+    parser.add_argument("--ignore-read-groups",
+        dest     = "ignoreReadGroups",
+        action   = "store_true",
+        help     = "Ignore read groups and lump all reads into one consensus")
+
+    parser.set_defaults(
+        ambiguous        = False,
+        ignoreReadGroups = False
+    )
 
     return vars(parser.parse_args(*args))
 

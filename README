@@ -1,4 +1,6 @@
-usage: simple-consensus-per-read-group [-h] [-t x] [-d n] [-a] input.bam
+usage: simple-consensus-per-read-group [-h] [-t x] [-d n] [-a]
+                                       [--ignore-read-groups]
+                                       input.bam
 
 Constructs a simple (dumb) consensus sequence for each read group
 (RG) in a BAM file.
@@ -14,18 +16,20 @@ Input must be a BAM file indexed with `samtools index`.  Output is
 FastQ.
 
 positional arguments:
-  input.bam            SAM/BAM file of aligned reads
+  input.bam             SAM/BAM file of aligned reads
 
 optional arguments:
-  -h, --help           show this help message and exit
-  -t x, --threshold x  Frequency threshold below which a base is not called
-                       (default: 0.7)
-  -d n, --min-depth n  Read depth below which a base is not called (default:
-                       1)
-  -a, --ambiguous      Call bases below threshold with ambiguity codes
-                       (default: False)
+  -h, --help            show this help message and exit
+  -t x, --threshold x   Frequency threshold below which a base is not called
+                        (default: 0.7)
+  -d n, --min-depth n   Read depth below which a base is not called (default:
+                        1)
+  -a, --ambiguous       Call bases below threshold with ambiguity codes
+                        (default: False)
+  --ignore-read-groups  Ignore read groups and lump all reads into one
+                        consensus (default: False)
 
-version 1.1.1
+version 1.2.0
 Copyright 2015 by Thomas Sibley <trsibley@uw.edu>
 Mullins Lab <https://mullinslab.microbiol.washington.edu>
 Department of Microbiology
