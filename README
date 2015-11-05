@@ -1,5 +1,6 @@
 usage: simple-consensus-per-read-group [-h] [-t x] [-d n] [-a]
                                        [--ignore-read-groups]
+                                       [--missing-quality q]
                                        input.bam
 
 Constructs a simple (dumb) consensus sequence for each read group
@@ -28,8 +29,10 @@ optional arguments:
                         (default: False)
   --ignore-read-groups  Ignore read groups and lump all reads into one
                         consensus (default: False)
+  --missing-quality q   Quality score to use for bases missing a quality score
+                        (default: 0)
 
-version 1.2.0
+version 1.2.1
 Copyright 2015 by Thomas Sibley <trsibley@uw.edu>
 Mullins Lab <https://mullinslab.microbiol.washington.edu>
 Department of Microbiology

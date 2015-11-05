@@ -4,14 +4,15 @@ import sys, re, argparse
 from textwrap import dedent
 from pysam    import AlignmentFile, toQualityString
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 class SimpleConsensus:
     def __init__(self, **args):
-        self.input = AlignmentFile( args['inputFile'] )
-        self.threshold = args['threshold']
-        self.minDepth = args['minDepth']
-        self.ignoreReadGroups = args['ignoreReadGroups']
+        self.input              = AlignmentFile( args['inputFile'] )
+        self.threshold          = args['threshold']
+        self.minDepth           = args['minDepth']
+        self.ignoreReadGroups   = args['ignoreReadGroups']
+        self.missingQuality     = args['missingQuality']
         self.callAmbiguousBases = args['ambiguous']
         self.ambiguity = {
                 "A":    "A",
@@ -59,7 +60,7 @@ class SimpleConsensus:
                     groups[rg][rpos] = { 'bases': [], 'quals': [] }
 
                 groups[rg][rpos]['bases'].append( alignment.query_sequence[qpos] )
-                groups[rg][rpos]['quals'].append( alignment.query_qualities[qpos] )
+                groups[rg][rpos]['quals'].append( alignment.query_qualities[qpos] if alignment.query_qualities else self.missingQuality )
 
         for rg in groups:
             sequence = []
@@ -160,6 +161,13 @@ def parseCommandArguments(*args):
         dest     = "ignoreReadGroups",
         action   = "store_true",
         help     = "Ignore read groups and lump all reads into one consensus")
+
+    parser.add_argument("--missing-quality",
+        dest     = "missingQuality",
+        type     = int,
+        default  = 0,
+        help     = "Quality score to use for bases missing a quality score",
+        metavar  = "q")
 
     parser.set_defaults(
         ambiguous        = False,
