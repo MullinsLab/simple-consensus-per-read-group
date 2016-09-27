@@ -11,6 +11,7 @@ class SimpleConsensus:
         self.input              = AlignmentFile( args['inputFile'] )
         self.threshold          = args['threshold']
         self.minDepth           = args['minDepth']
+        self.maxDepth           = args['maxDepth']
         self.ignoreReadGroups   = args['ignoreReadGroups']
         self.missingQuality     = args['missingQuality']
         self.callAmbiguousBases = args['ambiguous']
@@ -33,7 +34,7 @@ class SimpleConsensus:
                 }
 
     def run(self):
-        pileup = self.input.pileup( stepper = 'all' )
+        pileup = self.input.pileup( stepper = 'all', max_depth = self.maxDepth )
         groups = {}
 
         for site in pileup:
@@ -150,6 +151,13 @@ def parseCommandArguments(*args):
         type     = int,
         default  = 1,
         help     = "Read depth below which a base is not called",
+        metavar  = "n")
+
+    parser.add_argument("--max-depth",
+        dest     = "maxDepth",
+        type     = int,
+        default  = 8000,
+        help     = "Maximum number of reads considered for a single consensus position",
         metavar  = "n")
 
     parser.add_argument("-a", "--ambiguous",
