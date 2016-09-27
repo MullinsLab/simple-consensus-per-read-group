@@ -2,7 +2,7 @@
 import sys, re, argparse
 
 from textwrap import dedent
-from pysam    import AlignmentFile, toQualityString
+from pysam    import AlignmentFile, qualities_to_qualitystring
 
 __version__ = '1.2.1'
 
@@ -104,7 +104,7 @@ class SimpleConsensus:
                     quality.append(sum(quals) // len(quals)) # XXX: can this be better?
 
             # Output FastQ
-            print("@%s\n%s\n+\n%s" % (rg, ''.join(sequence), toQualityString(quality)))
+            print("@%s\n%s\n+\n%s" % (rg, ''.join(sequence), qualities_to_qualitystring(quality)))
 
 class BetterFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
     pass
