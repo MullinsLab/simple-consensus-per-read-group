@@ -1,4 +1,4 @@
-usage: simple-consensus-per-read-group [-h] [-t x] [-d n] [-a]
+usage: simple-consensus-per-read-group [-h] [-t x] [-d n] [--max-depth n] [-a]
                                        [--ignore-read-groups]
                                        [--missing-quality q]
                                        input.bam
@@ -25,6 +25,8 @@ optional arguments:
                         (default: 0.7)
   -d n, --min-depth n   Read depth below which a base is not called (default:
                         1)
+  --max-depth n         Maximum number of reads considered for a single
+                        consensus position (default: 8000)
   -a, --ambiguous       Call bases below threshold with ambiguity codes
                         (default: False)
   --ignore-read-groups  Ignore read groups and lump all reads into one
