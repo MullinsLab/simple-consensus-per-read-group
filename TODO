@@ -1,0 +1,9 @@
+Tests for:
+
+  * --threshold
+  * --min-depth and --max-depth
+  * --ambiguous
+
+
+Streaming consensus building instead of reading everything into memory before
+making calls.
