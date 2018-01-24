@@ -4,7 +4,7 @@ import sys, re, argparse
 from textwrap import dedent
 from pysam    import AlignmentFile, qualities_to_qualitystring
 
-__version__ = '1.2.2-dev'
+__version__ = '1.2.2'
 
 class SimpleConsensus:
     def __init__(self, **args):

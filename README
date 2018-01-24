@@ -35,7 +35,7 @@ optional arguments:
   --missing-quality q   Quality score to use for bases missing a quality score
                         (default: 0)
 
-version 1.2.2-dev
+version 1.2.2
 Copyright 2015 by Thomas Sibley <trsibley@uw.edu>
 Mullins Lab <https://mullinslab.microbiol.washington.edu>
 Department of Microbiology
