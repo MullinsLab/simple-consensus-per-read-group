@@ -11,7 +11,8 @@ thresholding is done to call a consensus base.  If no base reaches
 the threshold, an N is called.
 
 Consensus sequences span only the reference bases between the first
-and last covered base.
+and last covered base.  Multiple reference sequences (such as
+chromosomes or contigs) will get separate consensus sequences.
 
 Input must be a BAM file indexed with `samtools index`.  Output is
 FastQ.
@@ -34,7 +35,7 @@ optional arguments:
   --missing-quality q   Quality score to use for bases missing a quality score
                         (default: 0)
 
-version 1.2.1
+version 1.2.2-dev
 Copyright 2015 by Thomas Sibley <trsibley@uw.edu>
 Mullins Lab <https://mullinslab.microbiol.washington.edu>
 Department of Microbiology

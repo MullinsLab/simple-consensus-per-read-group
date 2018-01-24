@@ -4,7 +4,7 @@ import sys, re, argparse
 from textwrap import dedent
 from pysam    import AlignmentFile, qualities_to_qualitystring
 
-__version__ = '1.2.1'
+__version__ = '1.2.2-dev'
 
 class SimpleConsensus:
     def __init__(self, **args):
@@ -43,14 +43,17 @@ class SimpleConsensus:
             for read in site.pileups:
                 qpos = read.query_position
                 alignment = read.alignment
+
+                rg = alignment.reference_name + '/'
+
                 if not self.ignoreReadGroups:
                     try:
-                        rg = alignment.get_tag('RG')
+                        rg += alignment.get_tag('RG')
                     except KeyError:
                         # No read group for this read?!
                         continue
                 else:
-                    rg = 'Consensus'
+                    rg += 'Consensus'
 
                 if qpos is None:
                     continue
@@ -121,7 +124,8 @@ def parseCommandArguments(*args):
             the threshold, an N is called.
 
             Consensus sequences span only the reference bases between the first
-            and last covered base.
+            and last covered base.  Multiple reference sequences (such as
+            chromosomes or contigs) will get separate consensus sequences.
 
             Input must be a BAM file indexed with `samtools index`.  Output is
             FastQ.
